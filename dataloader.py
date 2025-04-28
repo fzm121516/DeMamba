@@ -265,7 +265,6 @@ def generate_dataset_loader(cfg):
     # val_loader = torch.utils.data.DataLoader(
     #         val_dataset, batch_size=cfg['val_batch_size'], shuffle=False, num_workers=cfg['num_workers'], pin_memory=True, drop_last=False
     #     )
-    # val_loader=None
     index_train = df_train.index.tolist()
     index_train = index_train[:]
     train_dataset = Ours_Dataset_train(index_train, df_train)

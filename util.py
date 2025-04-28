@@ -99,19 +99,19 @@ def train_one_epoch(cfg, model, loss_ce, scheduler, optimizer, epochID, max_epoc
     trainLoss = trainLoss / lossTrainNorm
     
     if (epochID+1) % 1 == 0:
-        pred_accuracy, video_id, pred_labels, true_labels, outpred = eval_model(cfg, model, val_loader, loss_ce, cfg['val_batch_size'])    
+        # pred_accuracy, video_id, pred_labels, true_labels, outpred = eval_model(cfg, model, val_loader, loss_ce, cfg['val_batch_size'])    
 
         torch.save(
             {"epoch": epochID + 1, "model_state_dict": model.state_dict()},
             snapshot_path + "/last"+ ".pth",
             )
 
-        if pred_accuracy > max_acc:
-            max_epoch, max_acc = epochID, pred_accuracy
-            torch.save(
-            {"epoch": epochID + 1, "model_state_dict": model.state_dict()},
-            snapshot_path + "/best_acc"+ ".pth",
-            )
+        # if pred_accuracy > max_acc:
+        #     max_epoch, max_acc = epochID, pred_accuracy
+        #     torch.save(
+        #     {"epoch": epochID + 1, "model_state_dict": model.state_dict()},
+        #     snapshot_path + "/best_acc"+ ".pth",
+        #     )
 
         # df_result = pd.DataFrame({
         #     'data_path': video_id,
