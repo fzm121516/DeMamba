@@ -16,7 +16,7 @@ def process_video(video_path):
     path = video_path.split('/')[1:-1]
     path = '/'.join(path)
 
-    image_path = './train_fake/'+path+'/'+ video_name+'/'
+    image_path = './train_real/'+path+'/'+ video_name+'/'
     print(video_name)
     if os.path.exists(image_path):
         print("路径存在")
@@ -42,7 +42,7 @@ def process_video(video_path):
 
 if __name__ == '__main__':
     print("Getting frames!!")
-    video_paths = '/root/zgp2/fanzheming/DVF/1_fake'
+    video_paths = '/root/zgp2/fanzheming/DVF/0_real'
     all_dirs = []
     all_dirs = glob(video_paths+'/*')
     

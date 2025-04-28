@@ -113,63 +113,63 @@ def train_one_epoch(cfg, model, loss_ce, scheduler, optimizer, epochID, max_epoc
             snapshot_path + "/best_acc"+ ".pth",
             )
 
-        df_result = pd.DataFrame({
-            'data_path': video_id,
-            'predicted_label': pred_labels,
-            'actual_label': true_labels,
-            'predicted_prob':outpred
-        })
+        # df_result = pd.DataFrame({
+        #     'data_path': video_id,
+        #     'predicted_label': pred_labels,
+        #     'actual_label': true_labels,
+        #     'predicted_prob':outpred
+        # })
 
-        temp_result_txt = snapshot_path+'/Epoch_'+str(epochID)+'_accuracy.txt'
-        with open(temp_result_txt, 'w') as file:
-            true_labels = df_result['actual_label']
-            pred_probs = df_result['predicted_prob'] 
-            auc = roc_auc_score(true_labels, pred_probs)
-            ap = average_precision_score(true_labels, pred_probs)
-            file.write(f"总正确率: {pred_accuracy:.2%}\n")
-            file.write(f"AUC是: {auc:.2%}\n")
-            file.write(f"AP是: {ap:.2%}\n")
+        # temp_result_txt = snapshot_path+'/Epoch_'+str(epochID)+'_accuracy.txt'
+        # with open(temp_result_txt, 'w') as file:
+        #     true_labels = df_result['actual_label']
+        #     pred_probs = df_result['predicted_prob'] 
+        #     auc = roc_auc_score(true_labels, pred_probs)
+        #     ap = average_precision_score(true_labels, pred_probs)
+        #     file.write(f"总正确率: {pred_accuracy:.2%}\n")
+        #     file.write(f"AUC是: {auc:.2%}\n")
+        #     file.write(f"AP是: {ap:.2%}\n")
 
-        prefixes = ["fake/ModelScope", "fake/Morph", "fake/MoonValley", 
-                    "fake/HotShot", "fake/EvalCrafter_T2V_Dataset/show_1", 
-                    "fake/Sora", "fake/Wild", "fake/VideoCrafter",
-                   "fake/Lavies", "fake/Gen2"]
+        # prefixes = ["fake/ModelScope", "fake/Morph", "fake/MoonValley", 
+        #             "fake/HotShot", "fake/EvalCrafter_T2V_Dataset/show_1", 
+        #             "fake/Sora", "fake/Wild", "fake/VideoCrafter",
+        #            "fake/Lavies", "fake/Gen2"]
 
-        video_nums = [700, 700, 626, 700, 700, 56, 926, 1400, 1400, 1380]
+        # video_nums = [700, 700, 626, 700, 700, 56, 926, 1400, 1400, 1380]
 
-        # real 
-        condition = df_result['data_path'].apply(lambda x: x.startswith("real"))
-        temp_df_val = df_result[condition]
-        temp_df_val['correct'] = temp_df_val['predicted_label'] == temp_df_val['actual_label']
-        accuracy = temp_df_val['correct'].mean()
+        # # real 
+        # condition = df_result['data_path'].apply(lambda x: x.startswith("real"))
+        # temp_df_val = df_result[condition]
+        # temp_df_val['correct'] = temp_df_val['predicted_label'] == temp_df_val['actual_label']
+        # accuracy = temp_df_val['correct'].mean()
 
-        FP = int((1-accuracy) * 10000)
+        # FP = int((1-accuracy) * 10000)
 
-        for index, temp_prefixes in enumerate(prefixes):
-            condition = df_result['data_path'].apply(lambda x: x.startswith(temp_prefixes))
-            temp_df_val = df_result[condition]
-            temp_df_val['correct'] = temp_df_val['predicted_label'] == temp_df_val['actual_label']
-            accuracy = temp_df_val['correct'].mean()
+        # for index, temp_prefixes in enumerate(prefixes):
+        #     condition = df_result['data_path'].apply(lambda x: x.startswith(temp_prefixes))
+        #     temp_df_val = df_result[condition]
+        #     temp_df_val['correct'] = temp_df_val['predicted_label'] == temp_df_val['actual_label']
+        #     accuracy = temp_df_val['correct'].mean()
 
-            TP = int(accuracy * video_nums[index])
-            FN = int((1-accuracy) * video_nums[index])
-            P, R = TP / (TP + FP), TP / (TP + FN)
-            F1 = 2 * P * R / (P + R)
+        #     TP = int(accuracy * video_nums[index])
+        #     FN = int((1-accuracy) * video_nums[index])
+        #     P, R = TP / (TP + FP), TP / (TP + FN)
+        #     F1 = 2 * P * R / (P + R)
 
-            condition |= df_result['data_path'].str.startswith('real')
-            temp_df_val = df_result[condition]
-            true_labels = temp_df_val['actual_label']
-            pred_probs = temp_df_val['predicted_prob']  # 假设这是模型预测的概率
-            ap = average_precision_score(true_labels, pred_probs)
-            with open(temp_result_txt, 'a') as file:
-                name = temp_prefixes.split('/')[-1]
-                file.write(f"文件名: {name}, Recall是: {accuracy}\n")
-                file.write(f"文件名: {name}, F1是: {F1}\n")
-                file.write(f"文件名: {name}, AP是: {ap}\n")
+        #     condition |= df_result['data_path'].str.startswith('real')
+        #     temp_df_val = df_result[condition]
+        #     true_labels = temp_df_val['actual_label']
+        #     pred_probs = temp_df_val['predicted_prob']  # 假设这是模型预测的概率
+        #     ap = average_precision_score(true_labels, pred_probs)
+        #     with open(temp_result_txt, 'a') as file:
+        #         name = temp_prefixes.split('/')[-1]
+        #         file.write(f"文件名: {name}, Recall是: {accuracy}\n")
+        #         file.write(f"文件名: {name}, F1是: {F1}\n")
+        #         file.write(f"文件名: {name}, AP是: {ap}\n")
 
         print("*****Average Training loss",str(trainLoss),"*****\n")
-        print("*****Epoch", str(epochID), "*****Acc ", str(pred_accuracy), '*****',
-            '\n', "*****Max acc epoch", str(max_epoch), "*****Acc ", str(max_acc), '*****\n')
+        # print("*****Epoch", str(epochID), "*****Acc ", str(pred_accuracy), '*****',
+        #     '\n', "*****Max acc epoch", str(max_epoch), "*****Acc ", str(max_acc), '*****\n')
     end_time = time.time()
 
     return max_epoch, max_acc, end_time - ss_time

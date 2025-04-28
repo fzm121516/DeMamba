@@ -16,7 +16,7 @@ class XCLIP(nn.Module):
     ):
         super(XCLIP, self).__init__()
       
-        self.backbone = XCLIPVisionModel.from_pretrained("GenVideo/pretrained_weights/xclip")
+        self.backbone = XCLIPVisionModel.from_pretrained("/root/zgp2/fanzheming/LVLM/xclip-base-patch16")
         self.fc_norm = nn.LayerNorm(768)
         self.head = nn.Linear(768, 1)
 

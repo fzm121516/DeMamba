@@ -16,7 +16,7 @@ def count_images_in_folder(folder_path):
     return image_count, image_names
 
 
-folder_path = '/root/zgp2/fanzheming/DeMamba/Preprocess/train_fake/root/zgp2/fanzheming/DVF/1_fake'
+folder_path = '/root/zgp2/fanzheming/DeMamba/Preprocess/train_real/root/zgp2/fanzheming/DVF/0_real'
 all_dirs = []
 
 for root, dirs, files in os.walk(folder_path):
@@ -53,8 +53,8 @@ for video_path in all_dirs:
         frame_seq_counts.append(temp_frame_seqs)
         save_path.append(frame_path)
         content_paths.append(content_path)
-        chinese_labels.append('AIGC视频')
-        # chinese_labels.append('真实视频')
+        # chinese_labels.append('AIGC视频')
+        chinese_labels.append('真实视频')
         break
 
 dic={
@@ -67,6 +67,6 @@ dic={
 }
 
 print(dic)
-pd.DataFrame(dic).to_csv('fake.csv', encoding='utf-8', index=False)
+pd.DataFrame(dic).to_csv('real.csv', encoding='utf-8', index=False)
 
 

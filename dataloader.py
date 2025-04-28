@@ -216,7 +216,7 @@ class Ours_Dataset_val(data.Dataset):
 
 
 def generate_dataset_loader(cfg):
-    df_train = pd.read_csv('GenVideo/datasets/train.csv')
+    df_train = pd.read_csv('/root/zgp2/fanzheming/DeMamba/Preprocess/train.csv')
 
     if cfg['task'] == 'normal':
         df_val = pd.read_csv('GenVideo/datasets/val_id.csv')
@@ -252,20 +252,20 @@ def generate_dataset_loader(cfg):
             for prefix in prefixes[1:]:
                 video_condition |= df_train['content_path'].str.startswith(prefix)
             df_train = df_train[video_condition]
-    else:
-        df_val = pd.read_csv('GenVideo/datasets/val_ood.csv')
+    # else:
+    #     df_val = pd.read_csv('GenVideo/datasets/val_ood.csv')
 
     df_train.reset_index(drop=True, inplace=True)
-    df_val.reset_index(drop=True, inplace=True)
+    # df_val.reset_index(drop=True, inplace=True)
     
-    index_val = df_val.index.tolist()
-    index_val = index_val[:]
+    # index_val = df_val.index.tolist()
+    # index_val = index_val[:]
 
-    val_dataset = Ours_Dataset_val(cfg, index_val, df_val)
-    val_loader = torch.utils.data.DataLoader(
-            val_dataset, batch_size=cfg['val_batch_size'], shuffle=False, num_workers=cfg['num_workers'], pin_memory=True, drop_last=False
-        )
-
+    # val_dataset = Ours_Dataset_val(cfg, index_val, df_val)
+    # val_loader = torch.utils.data.DataLoader(
+    #         val_dataset, batch_size=cfg['val_batch_size'], shuffle=False, num_workers=cfg['num_workers'], pin_memory=True, drop_last=False
+    #     )
+    # val_loader=None
     index_train = df_train.index.tolist()
     index_train = index_train[:]
     train_dataset = Ours_Dataset_train(index_train, df_train)
@@ -274,8 +274,8 @@ def generate_dataset_loader(cfg):
         )
 
     print("******* Training Video IDs", str(len(index_train))," Training Batch size ", str(cfg['train_batch_size'])," *******")
-    print("******* Testing Video IDs", str(len(index_val)), " Testing Batch size ", str(cfg['val_batch_size'])," *******")
+    # print("******* Testing Video IDs", str(len(index_val)), " Testing Batch size ", str(cfg['val_batch_size'])," *******")
 
-    return train_loader, val_loader
+    return train_loader, train_loader
 
 

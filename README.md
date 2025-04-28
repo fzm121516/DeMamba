@@ -1,3 +1,9 @@
+python3 train.py --config ./configs/XCLIP_DeMamba.yaml
+
+
+
+
+
 This is the official code of paper 'DeMamba: AI-Generated Video Detection on Million-Scale GenVideo Benchmark'.
 
 ## :boom: News!!! 
